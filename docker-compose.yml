@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  db:
+    container_name: sys-login
+    image: mysql:8.0.28
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: root
+    volumes:
+      - ./.docker/mysql/dbdata:/var/lib/mysql
+    ports:
+      - '3306:3306'
