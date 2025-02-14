@@ -27,7 +27,7 @@ public class AuthController {
     public ResponseEntity<LoginDTO> login(@RequestBody @Valid LoginForm form) throws Exception {
         try {
             LoginDTO response = authService.login(form);
-            return ResponseHandler.generateResponse(appMessage.getMessage("auth.login.success"), HttpStatus.OK, response);
+            return ResponseHandler.generateResponse(appMessage.getMessage("success"), HttpStatus.OK, response);
         }catch (BadCredentialsException e){
             return ResponseHandler.generateResponse(appMessage.getMessage("auth.bad.credentials"), HttpStatus.BAD_REQUEST, null);
         }catch (Exception e){

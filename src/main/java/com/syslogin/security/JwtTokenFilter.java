@@ -51,7 +51,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private UserDetails getUserDetails(String accessToken) {
         String[] subjectArray = jwtUtil.getSubject(accessToken).split(",");
-        String userEmail = subjectArray[1];
+        String userEmail = subjectArray[0];
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
         return new org.springframework.security.core.userdetails.User(userEmail, userDetails.getPassword(), userDetails.getAuthorities());

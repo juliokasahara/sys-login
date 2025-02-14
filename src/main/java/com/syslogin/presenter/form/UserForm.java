@@ -9,7 +9,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.annotation.Nullable;
 import javax.persistence.Column;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -28,13 +30,14 @@ public class UserForm {
     @UniqueEmail(message = "{user.already.exist}")
     private String email;
 
-    @Column(nullable = false)
+    @NotBlank(message = "{user.telefone.invalid}")
     private String telefone;
 
     @ValidPassword
     private String password;
 
     private String matchingPassword;
+
 }
 
 

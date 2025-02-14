@@ -28,7 +28,7 @@ public class AuthServiceImpl implements AuthService{
         User loggedUser = (User) authenticate.getPrincipal();
 
         String accessToken = jwtTokenUtil.generateAccessToken(loggedUser,authenticate);
-        LoginDTO loginData = new LoginDTO(loggedUser.getEmail(), accessToken);
+        LoginDTO loginData = new LoginDTO(loggedUser.getEmail(), loggedUser.getUsername(), accessToken);
         log.info("User {} has been logged in", loggedUser.getEmail());
         return loginData;
     }

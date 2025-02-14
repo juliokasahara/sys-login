@@ -32,6 +32,8 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String telefone;
     @Column
+    private String resetPasswordToken;
+    @Column
     private Date lastLogin;
     @Column
     private Date createdOn;

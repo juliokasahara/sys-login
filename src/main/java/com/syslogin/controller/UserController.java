@@ -2,14 +2,19 @@ package com.syslogin.controller;
 
 import com.syslogin.presenter.ResponseHandler;
 import com.syslogin.presenter.dto.UserDTO;
+import com.syslogin.presenter.form.NewPasswordForm;
 import com.syslogin.presenter.form.UserForm;
 import com.syslogin.service.UserService;
 import com.syslogin.utils.AppMessage;
+import com.syslogin.utils.PathUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -27,6 +32,47 @@ public class UserController {
             return ResponseHandler.generateResponse(appMessage.getMessage("user.successfully.created"), HttpStatus.OK, userDTO);
         }catch (Exception e){
             return ResponseHandler.generateResponse(appMessage.getMessage("user.creation.error"), HttpStatus.INTERNAL_SERVER_ERROR, null);
+        }
+    }
+
+    @PostMapping("/recover-password")
+    @ResponseBody
+    public ResponseEntity<?> processForgotPassword(HttpServletRequest request, @RequestBody UserForm form) throws Exception {
+
+        try {
+            userService.updateResetPasswordToken(form.getEmail(), PathUtil.getFrontURL(request));
+        }catch (Throwable t){
+            return ResponseHandler.generateResponse("Contate administrador do sistema", HttpStatus.BAD_REQUEST, null);
+        }
+        return ResponseHandler.generateResponse(appMessage.getMessage("success"), HttpStatus.OK, null);
+    }
+
+    @PostMapping("/new-password")
+    public ResponseEntity<?> processResetPassword(@RequestBody NewPasswordForm form) {
+        try {
+            userService.registerNewPassword(form);
+            return ResponseHandler.generateResponse(appMessage.getMessage("success"), HttpStatus.OK, null);
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(appMessage.getMessage("user.not.found"), HttpStatus.BAD_REQUEST, null);
+        }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserDTO> getInfoMe(@AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            UserDTO userDTO = userService.getUserByUsername(userDetails.getUsername());
+
+            return ResponseHandler.generateResponse(
+                    appMessage.getMessage("success"),
+                    HttpStatus.OK,
+                    userDTO
+            );
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(
+                    appMessage.getMessage("user.fetch.error"),
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    null
+            );
         }
     }
 

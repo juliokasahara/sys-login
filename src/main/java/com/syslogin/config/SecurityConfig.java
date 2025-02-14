@@ -27,8 +27,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(auth -> auth
-                        .mvcMatchers("/user/save").permitAll()
-                        .mvcMatchers("/auth/login").permitAll()
+                        .mvcMatchers("/user/save","/user/recover-password","/auth/login","/user/new-password").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

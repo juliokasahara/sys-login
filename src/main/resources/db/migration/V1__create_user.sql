@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS user (
     email VARCHAR(50) UNIQUE NOT NULL,
     telefone VARCHAR(45) NOT NULL ,
     password VARCHAR(64) NOT NULL,
+    reset_password_token VARCHAR(40),
     created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     last_login TIMESTAMP NULL
 );
