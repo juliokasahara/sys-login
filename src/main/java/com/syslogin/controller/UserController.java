@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -36,13 +37,14 @@ public class UserController {
     }
 
     @PostMapping("/recover-password")
-    @ResponseBody
     public ResponseEntity<?> processForgotPassword(HttpServletRequest request, @RequestBody UserForm form) throws Exception {
 
         try {
             userService.updateResetPasswordToken(form.getEmail(), PathUtil.getFrontURL(request));
-        }catch (Throwable t){
-            return ResponseHandler.generateResponse("Contate administrador do sistema", HttpStatus.BAD_REQUEST, null);
+        }catch (ResponseStatusException e){
+            return ResponseHandler.generateResponse("Usuário não encontrado.", HttpStatus.BAD_REQUEST, null);
+        }catch (Exception e){
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY, null);
         }
         return ResponseHandler.generateResponse(appMessage.getMessage("success"), HttpStatus.OK, null);
     }

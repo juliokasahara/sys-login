@@ -70,9 +70,10 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    public void updateResetPasswordToken(String cpfEmail,String path) throws UnsupportedEncodingException {
+    public void updateResetPasswordToken(String email,String path) throws UnsupportedEncodingException {
         try {
-            User user = userRepository.findByEmail(cpfEmail).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Usuário não encontrado." + cpfEmail));
+            User user = userRepository.findByEmail(email).orElseThrow(
+                    ()-> new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,"Usuário não encontrado email: " + email));
             user.setResetPasswordToken(RandomString.make(40));
 
             String resetPasswordLink = path + "/new-password?token=" + user.getResetPasswordToken();
