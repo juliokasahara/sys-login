@@ -25,8 +25,8 @@ public class UserController {
     private final UserService userService;
     private final AppMessage appMessage;
 
-    @PostMapping("/save")
-    public ResponseEntity<UserDTO> saveUser(@RequestBody @Valid UserForm form){
+    @PostMapping("/register")
+    public ResponseEntity<UserDTO> registerUser(@RequestBody @Valid UserForm form){
         try {
             var userDTO = userService.registerNewUserAccount(form);
 
